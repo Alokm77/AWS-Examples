@@ -1,23 +1,22 @@
 #!/usr/bin/env bash
 
-# Check if the bucket name and region are provided as arguments
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <bucket-name> <region>"
+# Check if a bucket name is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <bucket-name>"
     exit 1
 fi
 
-# Assign arguments to variables
+# Assign the first argument to the BUCKET_NAME variable
 BUCKET_NAME=$1
-REGION=$2
+REGION="us-east-1"
 
-# Create the S3 bucket
+# Create the S3 bucket in us-east-1
 echo "Creating S3 bucket: $BUCKET_NAME in region: $REGION"
 
-# Run AWS CLI command to create the bucket
-aws s3api create-bucket \
-    --bucket "$BUCKET_NAME" \
-    --region "$REGION" \
-    --create-bucket-configuration LocationConstraint="$REGION"
+# Run AWS CLI command to create the bucket in us-east-1
+aws s3api create-bucket --bucket "$BUCKET_NAME" --region "$REGION" \
+--query Location \
+--output text
 
 # Check if the bucket creation was successful
 if [ $? -eq 0 ]; then
